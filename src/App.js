@@ -1,6 +1,7 @@
 import './App.css';
-import React, {useState} from 'react';
-import Todolists from './Todolists';
+import React, {Suspense, useState,lazy} from 'react';
+// import Todolists from './Todolists';
+const Todolists = lazy(()=>{import('./Todolists')});
 function App() {
 const [inputList,setInputList]=useState("");
 const [items,setItems] = useState([]);
@@ -20,22 +21,27 @@ const itemEvent = (event)=>{
    }))
   };
   return (
-    <><center><div className ="main_div">
+    <Suspense fallback={<h1>hello .... </h1>}>
+    <center><div className ="main_div">
       <div className="center_div"><br/>
        <h1>ToDo list</h1><br/>
 
-       <div class="form-group">
+       <div className="form-group">
        <input type = "text" placeholder = "Add an Item"
-       className="form-control forrm"
+       className="form-control form"
        value = {inputList}
        onChange = {itemEvent}/>
       <button onClick = {listOfItems}>+</button><ol>
         {items.map( (itemval,index) => {
-         return <Todolists key = {index}
+         return (
+         
+         <Todolists key = {index}
          id = {index}
          text = {itemval}
          onSelect = {deleteItems}
-         />;
-        })}
-      </ol> </div></div></div></center></>);}
+         />
+        )})}
+      </ol> </div></div></div></center>
+      </Suspense>
+      );}
 export default App;
